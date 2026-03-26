@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strawberry Pi — Project Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e8341a;
+    --red-light: #ff5c3a;
+    --red-pale: #fff1ee;
+    --green: #1a6b3a;
+    --green-light: #2d9e58;
+    --green-pale: #edf7f1;
+    --dark: #1a1410;
+    --mid: #4a3f35;
+    --light: #f9f4f0;
+    --white: #ffffff;
+    --border: #e8ddd5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--light);
+    color: var(--dark);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--dark);
+    color: var(--white);
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '🍓';
+    position: absolute;
+    font-size: 300px;
+    right: -40px;
+    top: -60px;
+    opacity: 0.06;
+    line-height: 1;
+  }
+
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+
+  header h1 span {
+    color: var(--red-light);
+  }
+
+  header p {
+    font-size: 16px;
+    color: #a89e95;
+    max-width: 600px;
+    font-weight: 300;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6b5f57;
+  }
+
+  .meta-value {
+    font-size: 14px;
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  /* EXPERIMENT OVERVIEW */
+  .experiment {
+    background: var(--white);
+    margin: 40px 60px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .chamber {
+    padding: 40px;
+  }
+
+  .chamber:first-child {
+    border-right: 1px solid var(--border);
+    background: var(--red-pale);
+  }
+
+  .chamber:last-child {
+    background: var(--green-pale);
+  }
+
+  .chamber-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .chamber:first-child .chamber-tag { color: var(--red); }
+  .chamber:last-child .chamber-tag { color: var(--green); }
+
+  .chamber h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .chamber p {
+    font-size: 14px;
+    color: var(--mid);
+  }
+
+  /* MAIN CONTENT */
+  main {
+    padding: 0 60px 80px;
+  }
+
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #9a8e85;
+    margin-bottom: 32px;
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* PHASE CARDS */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .phase {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    padding: 28px 36px;
+    cursor: pointer;
+    gap: 24px;
+  }
+
+  .phase-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+  }
+
+  .phase-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .phase-info p {
+    font-size: 13px;
+    color: #9a8e85;
+    font-weight: 300;
+  }
+
+  .phase-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-hardware { background: #fff3cd; color: #856404; }
+  .badge-software { background: #cff4fc; color: #055160; }
+  .badge-network { background: #d1e7dd; color: #0a3622; }
+  .badge-web { background: #f8d7da; color: #842029; }
+  .badge-test { background: #e2e3e5; color: #41464b; }
+
+  .phase-body {
+    padding: 0 36px 32px 140px;
+    display: none;
+  }
+
+  .phase.open .phase-body {
+    display: block;
+  }
+
+  .phase.open .phase-header {
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  /* STEPS */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 24px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px dashed var(--border);
+    align-items: start;
+  }
+
+  .step:last-child {
+    border-bottom: none;
+  }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #c5bab3;
+    font-weight: 500;
+    padding-top: 2px;
+  }
+
+  .step-content h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--dark);
+  }
+
+  .step-content p {
+    font-size: 13px;
+    color: #7a6e67;
+    font-weight: 300;
+  }
+
+  .step-content code {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: #f0ebe6;
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: var(--red);
+  }
+
+  /* ARCHITECTURE */
+  .arch-box {
+    background: var(--dark);
+    color: var(--white);
+    border-radius: 4px;
+    padding: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  .arch-box .comment { color: #6b5f57; }
+  .arch-box .highlight { color: var(--red-light); }
+  .arch-box .green { color: #4ade80; }
+  .arch-box .yellow { color: #fbbf24; }
+
+  /* COMPONENTS TABLE */
+  .components {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .comp-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: center;
+  }
+
+  .comp-row:last-child { border-bottom: none; }
+
+  .comp-row.header {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .comp-row:not(.header):hover {
+    background: var(--light);
+  }
+
+  .comp-name { font-weight: 500; }
+  .comp-qty {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #9a8e85;
+  }
+  .comp-role { color: #7a6e67; font-weight: 300; }
+
+  /* WEBSITE FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .feature {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 28px;
+    border-radius: 4px;
+  }
+
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .feature h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .feature p {
+    font-size: 13px;
+    color: #7a6e67;
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: #6b5f57;
+    padding: 40px 60px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span { color: var(--red-light); }
+
+  @media (max-width: 768px) {
+    header, main { padding-left: 24px; padding-right: 24px; }
+    .experiment { margin: 24px; grid-template-columns: 1fr; }
+    .chamber:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .phase-header { grid-template-columns: 50px 1fr; }
+    .phase-badge { display: none; }
+    .phase-body { padding-left: 66px; }
+    .phase-number { font-size: 32px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .comp-row { grid-template-columns: 1fr 1fr; }
+    .comp-role { display: none; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Projectplan — 2026</div>
+  <h1>Strawberry <span>Pi</span></h1>
+  <p>Een volledig geautomatiseerde mini-serre met 2 geïsoleerde kamers, aangestuurd door een Raspberry Pi 4 — inclusief remote monitoring website.</p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Platform</span>
+      <span class="meta-value">Raspberry Pi 4 (4GB)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Experiment</span>
+      <span class="meta-value">24/7 licht vs. 12-13u licht</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Monitoring</span>
+      <span class="meta-value">Website + Livestream + Timelapse</span>
+    </div>
+  </div>
+</header>
+
+<!-- EXPERIMENT -->
+<div class="experiment">
+  <div class="chamber">
+    <div class="chamber-tag">Kamer A</div>
+    <h3>24/7 Continu Licht</h3>
+    <p>Aardbeien krijgen de hele dag en nacht licht. Kweeklamp staat altijd aan via relay module.</p>
+  </div>
+  <div class="chamber">
+    <div class="chamber-tag">Kamer B</div>
+    <h3>Normale Dagcyclus</h3>
+    <p>Aardbeien krijgen 12–13 uur licht per dag. Kweeklamp wordt automatisch aan/uit gezet door de Pi.</p>
+  </div>
+</div>
+
+<main>
+
+  <!-- ARCHITECTUUR -->
+  <div class="section-title">Systeem Architectuur</div>
+  <div class="arch-box">
+    <div><span class="comment">┌─────────────────────────────────────────────┐</span></div>
+    <div><span class="comment">│</span>           <span class="highlight">RASPBERRY PI 4</span>                    <span class="comment">│</span></div>
+    <div><span class="comment">│</span>                                             <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  <span class="green">● 24/7 Control Script</span>  ──→  data.json      <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  <span class="green">● Flask API Server</span>      ──→  leest json     <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  <span class="green">● MJPEG Camera Stream</span>   ──→  cam1 + cam2   <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  <span class="green">● Timelapse Script</span>      ──→  foto per uur  <span class="comment">│</span></div>
+    <div><span class="comment">│</span>                                             <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  <span class="yellow">↕  Cloudflare Tunnel  (publieke URL)</span>       <span class="comment">│</span></div>
+    <div><span class="comment">└─────────────────────────────────────────────┘</span></div>
+    <div>                        <span class="comment">↕</span></div>
+    <div><span class="comment">┌─────────────────────────────────────────────┐</span></div>
+    <div><span class="comment">│</span>        <span class="highlight">WEBSITE  (GitHub Pages)</span>              <span class="comment">│</span></div>
+    <div><span class="comment">│</span>  Dashboard · Livestream · Log · Commands    <span class="comment">│</span></div>
+    <div><span class="comment">└─────────────────────────────────────────────┘</span></div>
+  </div>
+
+  <!-- HARDWARE COMPONENTEN -->
+  <div class="section-title">Hardware Componenten</div>
+  <div class="components">
+    <div class="comp-row header">
+      <span>Component</span>
+      <span>Aantal</span>
+      <span>Functie</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Raspberry Pi 4 (4GB)</span>
+      <span class="comp-qty">×1</span>
+      <span class="comp-role">Centrale controller van het hele systeem</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">DHT22 Sensor</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Temperatuur & luchtvochtigheid per kamer</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Grove Soil Moisture Sensor</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Bodemvochtigheid meten (analoog via ADS1115)</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">ADS1115 ADC</span>
+      <span class="comp-qty">×1</span>
+      <span class="comp-role">Analoog → digitaal voor soil sensors</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">L298N Motor Driver</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">PWM sturing van de computer fans</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">12V Waterpomp</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Automatisch water geven per kamer</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Relay Module (2-kanaals)</span>
+      <span class="comp-qty">×1</span>
+      <span class="comp-role">Aan/uit schakelen van kweeklampen (230V)</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Kweeklamp E27</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Groeilicht per kamer</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Computer Fan</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Ventilatie op basis van temp/humidity</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">USB Webcam (Yosoo)</span>
+      <span class="comp-qty">×2</span>
+      <span class="comp-role">Livestream + timelapse per kamer</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Grove 16×2 LCD</span>
+      <span class="comp-qty">×1</span>
+      <span class="comp-role">Lokaal display van sensordata</span>
+    </div>
+  </div>
+
+  <!-- AUTOMATISATIE LOGICA -->
+  <div class="section-title">Automatisatie Logica</div>
+  <div class="components">
+    <div class="comp-row header">
+      <span>Systeem</span>
+      <span>Trigger</span>
+      <span>Actie</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Fan</span>
+      <span class="comp-qty">Temp &gt;28° of Hum &gt;80%</span>
+      <span class="comp-role">Fan 100%</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Fan</span>
+      <span class="comp-qty">Temp &gt;25° of Hum &gt;75%</span>
+      <span class="comp-role">Fan 60%</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Fan</span>
+      <span class="comp-qty">Anders</span>
+      <span class="comp-role">Fan uit</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Waterpomp</span>
+      <span class="comp-qty">Soil &gt;1.46V (elke 4u check)</span>
+      <span class="comp-role">Pomp tijd = (1.71 − V) × 30 sec</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Licht Kamer A</span>
+      <span class="comp-qty">Altijd</span>
+      <span class="comp-role">Aan (24/7)</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-name">Licht Kamer B</span>
+      <span class="comp-qty">12–13u per dag</span>
+      <span class="comp-role">Aan/uit via relay + timer</span>
+    </div>
+  </div>
+
+  <!-- FASES -->
+  <div class="section-title">Stappenplan</div>
+  <div class="phases">
+
+    <div class="phase open">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">1</div>
+        <div class="phase-info">
+          <h3>Pi Voorbereiden</h3>
+          <p>Systeem updaten en libraries installeren</p>
+        </div>
+        <span class="phase-badge badge-hardware">Hardware</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Systeem updaten</h4>
+              <p>Run <code>sudo apt update && sudo apt upgrade</code> op de Pi.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Python libraries installeren</h4>
+              <p>Installeer: <code>flask</code>, <code>opencv-python</code>, <code>adafruit-dht</code>, <code>adafruit-ads1x15</code>, <code>RPi.GPIO</code>, <code>smbus2</code></p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Cameras testen</h4>
+              <p>Beide USB cameras aansluiten en controleren of ze herkend worden via <code>ls /dev/video*</code></p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>I2C inschakelen</h4>
+              <p>Via <code>sudo raspi-config</code> → Interface Options → I2C inschakelen (voor ADS1115 en LCD).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">2</div>
+        <div class="phase-info">
+          <h3>24/7 Control Script</h3>
+          <p>Automatisatie + data wegschrijven naar JSON</p>
+        </div>
+        <span class="phase-badge badge-software">Software</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Sensor uitlezing schrijven</h4>
+              <p>DHT22 (temp + humidity) en ADS1115 (soil moisture) uitlezen voor beide kamers.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Fan automatisatie</h4>
+              <p>PWM sturing via L298N op basis van temp/humidity drempelwaarden. 3 niveaus: 0%, 60%, 100%.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Waterpomp automatisatie</h4>
+              <p>Elke 4 uur soil check. Als voltage &gt;1.46V → pomp aan voor <code>(1.71 − V) × 30</code> seconden.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Licht automatisatie</h4>
+              <p>Kamer A: relay altijd aan. Kamer B: relay aan/uit op basis van tijdschema (12–13u licht).</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-content">
+              <h4>Data wegschrijven naar JSON</h4>
+              <p>Na elke cyclus schrijft het script alle data (sensors, fan status, pomp log, licht status) naar <code>data.json</code>. Flask leest dit bestand.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">06</span>
+            <div class="step-content">
+              <h4>Log bijhouden</h4>
+              <p>Elke actie (fan aan, pomp aan, etc.) wordt gelogd met timestamp naar <code>log.json</code>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">07</span>
+            <div class="step-content">
+              <h4>LCD display updaten</h4>
+              <p>Grove 16×2 LCD toont live temp + humidity van beide kamers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">3</div>
+        <div class="phase-info">
+          <h3>Flask API Server</h3>
+          <p>Backend die data deelt en commando's ontvangt</p>
+        </div>
+        <span class="phase-badge badge-software">Software</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Flask installeren en basis opzetten</h4>
+              <p>Aparte <code>api.py</code> file die naast het control script draait op poort 5000.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>GET endpoint: sensordata</h4>
+              <p><code>/api/data</code> → geeft alle sensordata terug als JSON aan de website.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>GET endpoint: log</h4>
+              <p><code>/api/log</code> → geeft de volledige log terug (fan events, pomp events, etc.).</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>POST endpoint: emergency commands</h4>
+              <p><code>/api/command</code> → ontvangt commando's (water geven, licht aan/uit, fan aan). Beveiligd met wachtwoord.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-content">
+              <h4>Command handler schrijven</h4>
+              <p>Flask schrijft een commando naar een <code>command.json</code> bestand. Het control script leest dit en voert het uit zonder de automatisatie te onderbreken.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">4</div>
+        <div class="phase-info">
+          <h3>Camera Streams & Timelapse</h3>
+          <p>MJPEG livestream + automatische timelapse</p>
+        </div>
+        <span class="phase-badge badge-software">Software</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>MJPEG stream server schrijven</h4>
+              <p>Via OpenCV en Flask: camera 1 op <code>/stream/cam1</code> (poort 8001) en camera 2 op <code>/stream/cam2</code> (poort 8002). ~5-10fps op lage resolutie.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Stream lokaal testen</h4>
+              <p>Via browser op zelfde netwerk controleren of beide streams werken.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Timelapse script schrijven</h4>
+              <p>Aparte <code>timelapse.py</code> die elke keer een foto trekt van beide cameras en opslaat als <code>cam1/YYYY-MM-DD_HH-00.jpg</code>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Timelapse automatiseren via cron</h4>
+              <p><code>0 * * * * python3 /home/pi/timelapse.py</code> → elke uur automatisch een foto. 24fps video = 1 seconde per dag.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-content">
+              <h4>Timelapse video exporteren (achteraf)</h4>
+              <p>Na het experiment: <code>ffmpeg -framerate 24 -pattern_type glob -i 'cam1/*.jpg' timelapse_cam1.mp4</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">5</div>
+        <div class="phase-info">
+          <h3>Cloudflare Tunnel</h3>
+          <p>Pi bereikbaar maken van buiten het netwerk</p>
+        </div>
+        <span class="phase-badge badge-network">Netwerk</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Cloudflare account aanmaken</h4>
+              <p>Gratis account op <code>cloudflare.com</code>. Geen creditcard nodig.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>cloudflared installeren op Pi</h4>
+              <p>Download en installeer de <code>cloudflared</code> ARM binary op de Pi.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Tunnel aanmaken en configureren</h4>
+              <p>Tunnel instellen met routes: <code>/api/*</code> → Flask (poort 5000), <code>/stream/*</code> → Camera server (poort 8001/8002).</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Tunnel als service instellen</h4>
+              <p>Cloudflare Tunnel automatisch laten starten bij Pi reboot via systemd service.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-content">
+              <h4>Publieke URL testen</h4>
+              <p>Controleren of API en camera streams bereikbaar zijn van buiten het thuisnetwerk.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">6</div>
+        <div class="phase-info">
+          <h3>Website (GitHub Pages)</h3>
+          <p>Frontend dashboard met alle info</p>
+        </div>
+        <span class="phase-badge badge-web">Website</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>GitHub repository aanmaken</h4>
+              <p>Nieuwe repo aanmaken en GitHub Pages inschakelen. Website wordt bereikbaar op <code>username.github.io/strawberry-pi</code>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Dashboard pagina</h4>
+              <p>Live sensordata van beide kamers: temp, humidity, soil moisture, fan status, licht status. Auto-refresh elke 10 seconden.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Camera pagina</h4>
+              <p>2 MJPEG streams naast elkaar embedded via <code>&lt;img src="https://tunnel-url/stream/cam1"&gt;</code>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Log pagina</h4>
+              <p>Chronologische lijst van alle events: wanneer fan aanging, hoe lang pomp liep, wanneer licht aan/uit ging.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">05</span>
+            <div class="step-content">
+              <h4>Emergency controls pagina</h4>
+              <p>Beveiligd met wachtwoord. Knoppen voor: water geven (kamer A/B), licht aan/uit, fan aan/uit. Stuurt POST request naar Flask API.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="phase-number">7</div>
+        <div class="phase-info">
+          <h3>Testen & Afwerken</h3>
+          <p>Alles controleren en stabiel maken</p>
+        </div>
+        <span class="phase-badge badge-test">Test</span>
+      </div>
+      <div class="phase-body">
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h4>Alles testen van buiten netwerk</h4>
+              <p>Via mobiel data (niet thuis wifi) controleren of website, streams en commando's werken.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h4>Scripts automatisch starten bij reboot</h4>
+              <p>Control script, Flask API en camera server instellen als systemd services zodat ze automatisch starten.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h4>Stabiliteitstest</h4>
+              <p>Pi 24–48 uur laten draaien en controleren of alles stabiel blijft. Memory leaks checken.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h4>Experiment starten</h4>
+              <p>Aardbeiplanten plaatsen, timelapse starten, en het experiment officieel beginnen.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- WEBSITE FEATURES -->
+  <div class="section-title">Website Functionaliteiten</div>
+  <div class="features-grid">
+    <div class="feature">
+      <span class="feature-icon">📊</span>
+      <h4>Sensor Dashboard</h4>
+      <p>Live data van temp, humidity en soil moisture voor beide kamers. Automatisch bijgewerkt elke 10 seconden.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📹</span>
+      <h4>Livestream</h4>
+      <p>2 MJPEG camera streams naast elkaar. ~5-10fps, bijna realtime beeld van beide kamers.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📋</span>
+      <h4>Event Log</h4>
+      <p>Chronologische lijst van alle automatische acties: fan, pomp, licht — allemaal met tijdstempel.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🚨</span>
+      <h4>Emergency Controls</h4>
+      <p>Beveiligd paneel voor bevoegde gebruikers om handmatig water, licht of fan te bedienen zonder het script te stoppen.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">💡</span>
+      <h4>Licht Status</h4>
+      <p>Toont wanneer licht aan/uit gaat per kamer, inclusief geplande tijden voor kamer B.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🎬</span>
+      <h4>Timelapse (achteraf)</h4>
+      <p>Elke uur een foto per kamer. Na het experiment samengesteld tot video via ffmpeg. 1 seconde per dag bij 24fps.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>🍓 Strawberry Pi Project — 2026</span>
+  <span>Raspberry Pi 4 · Flask · Cloudflare · GitHub Pages</span>
+</footer>
+
+<script>
+  // Smooth toggle for phases
+  document.querySelectorAll('.phase-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const phase = header.parentElement;
+      const wasOpen = phase.classList.contains('open');
+      phase.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>
