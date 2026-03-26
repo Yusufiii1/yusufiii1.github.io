@@ -589,7 +589,7 @@
   <div class="phases">
 
     <div class="phase open">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">1</div>
         <div class="phase-info">
           <h3>Pi Voorbereiden</h3>
@@ -632,7 +632,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">2</div>
         <div class="phase-info">
           <h3>24/7 Control Script</h3>
@@ -696,7 +696,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">3</div>
         <div class="phase-info">
           <h3>Flask API Server</h3>
@@ -746,7 +746,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">4</div>
         <div class="phase-info">
           <h3>Camera Streams & Timelapse</h3>
@@ -796,7 +796,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">5</div>
         <div class="phase-info">
           <h3>Cloudflare Tunnel</h3>
@@ -846,7 +846,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">6</div>
         <div class="phase-info">
           <h3>Website (GitHub Pages)</h3>
@@ -896,7 +896,7 @@
     </div>
 
     <div class="phase">
-      <div class="phase-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-header" onclick="togglePhase(this)">
         <div class="phase-number">7</div>
         <div class="phase-info">
           <h3>Testen & Afwerken</h3>
@@ -983,14 +983,9 @@
 </footer>
 
 <script>
-  // Smooth toggle for phases
-  document.querySelectorAll('.phase-header').forEach(header => {
-    header.addEventListener('click', () => {
-      const phase = header.parentElement;
-      const wasOpen = phase.classList.contains('open');
-      phase.classList.toggle('open');
-    });
-  });
+  function togglePhase(el) {
+    el.parentElement.classList.toggle('open');
+  }
 </script>
 
 </body>
